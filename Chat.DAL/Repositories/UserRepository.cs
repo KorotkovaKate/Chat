@@ -11,10 +11,10 @@ namespace Chat.DAL.Repositories
 {
     public class UserRepository(ChatDbContext context): IUserRepository
     {
-        public async Task<User> Authorization(string login, string password)
+        public async Task<User> Authorize(string login, string password)
         {
             var user = await context.Users.FirstOrDefaultAsync(user => user.UserName == login && user.Password == password);
-            if (user == null) { throw new Exception(); }
+            if (user == null) { throw new Exception("Not found user"); }
             return user;
         }
 
@@ -23,8 +23,10 @@ namespace Chat.DAL.Repositories
             return await context.Users.AsNoTracking().OrderBy(user => user.UserName).ToListAsync();
         }
 
-        public async Task Registration(User user)
+        public async Task Registrate(User user)
         {
+            var checkUser = await context.Users.FirstOrDefaultAsync(check => check.UserName == user.UserName);
+            if (checkUser != null) { throw new Exception("User already exists"); }
             try
             {
                 context.Users.Add(user);
