@@ -1,0 +1,67 @@
+﻿using Chat.Core.Interfaces.Services;
+using Chat.Core.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Chat.Api.Controllers
+{
+    [ApiController]
+    [Route("Messages")]
+    public class MessageController(IMessageService messageService): ControllerBase
+    {
+        [HttpPost("AddMessage")]
+        public async Task<IActionResult> AddMessage(Message message)
+        {
+            try
+            {
+                var addedMessage = await messageService.AddMessage(message);
+                return Ok(addedMessage);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetAllMessagesInChat")]
+        public async Task<IActionResult> GetAllMessagesInChat(uint chatId)
+        {
+            try
+            {
+                var allMessagesInChat = await messageService.GetAllMessagesInChat(chatId);
+                return Ok(allMessagesInChat);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetMessageInChat")]
+        public async Task<IActionResult> GetMessageInChat(uint messageId)
+        {
+            try
+            {
+                var message = await messageService.GetMessageInChat(messageId);
+                return Ok(message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetMessageInChatForSearch")]
+        public async Task<IActionResult> GetMessageInChatForSearch(string searchText)
+        {
+            try
+            {
+                var message = await messageService.GetMessageInChatForSearch(searchText);
+                return Ok(message);
+            }
+            catch (Exception ex)
+            { 
+                return BadRequest(ex.Message);
+            }
+        }
+    }
+}
