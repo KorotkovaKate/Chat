@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chat.Core.Interfaces.Repositories
+namespace Chat.Core.Interfaces.Services
 {
-    public interface IUserRepository
+    public interface IUserService
     {
         public Task<User> Authorize(string login, string password);
         public Task Registrate(User user);
