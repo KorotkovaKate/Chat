@@ -15,7 +15,9 @@ namespace Chat.DAL.Repositories
 
         public async Task<List<Message>> GetAllMessagesInChat(uint chatId)
         {
-            var messageList = await context.Messages.AsNoTracking().Where(message => message.ChatId == chatId).ToListAsync();
+            var messageList = await context.Messages.AsNoTracking()
+                .Include(m => m.Sender)
+                .Where(message => message.ChatId == chatId).ToListAsync();
             if (messageList.Count == 0) {  return new List<Message>(); }
             return messageList;
         }
