@@ -11,6 +11,6 @@ namespace Chat.Core.Interfaces.Repositories
     {
         public Task<List<Core.Models.Chat>> GetChatsByUserId(uint userId);
         public Task<Models.Chat> GetChatByUserName(string userName);
-        public Task<uint> AddChat(Core.Models.Chat chat);
+        public Task AddChat(User user);
     }
 }
