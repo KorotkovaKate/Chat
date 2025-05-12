@@ -1,4 +1,5 @@
-﻿using Chat.Core.Interfaces.Repositories;
+﻿using Chat.Application.Services;
+using Chat.Core.Interfaces.Repositories;
 using Chat.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,11 +12,28 @@ namespace Chat.DAL.Repositories
 {
     public class ChatRepository(ChatDbContext context) : IChatRepository
     {
-        public async Task<uint> AddChat(Core.Models.Chat chat)
+        public async Task AddChat(User user)
         {
-            var addedChat = await context.Chats.AddAsync(chat);
+            var chats = new List<Core.Models.Chat>();
+            var users = await context.Users.ToListAsync();
+
+            foreach (var tempuser in users)
+            {
+                if (tempuser.Id == user.Id) { continue; }
+                var chatUsers = new List<User>() { user, tempuser };
+                var chat = new Core.Models.Chat();
+                chat.ChatName = tempuser.UserName;
+                chat.Users = chatUsers;
+                chat.Messages = new List<Message>();
+
+                context.Users.Attach(chat.Users[0]);
+                context.Users.Attach(chat.Users[1]);
+
+                chats.Add(chat);
+            }
+
+            await context.Chats.AddRangeAsync(chats);
             await context.SaveChangesAsync();
-            return addedChat.Entity.Id;
         }
 
         public async Task<Core.Models.Chat> GetChatByUserName(string userName)
