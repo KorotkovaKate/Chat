@@ -1,4 +1,4 @@
-﻿using Chat.Core.Interfaces.Services;
+﻿using Chat.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chat.Api.Controllers
@@ -7,21 +7,8 @@ namespace Chat.Api.Controllers
     [Route("Chats")]
     public class ChatControllercs(IChatService chatService): ControllerBase
     {
-        [HttpPost("AddChat")]
-        public async Task<IActionResult> AddChat(Core.Models.Chat chat)
-        {
-            try
-            {
-                var addedchat = await chatService.AddChat(chat);
-                return Ok(addedchat);
-            }
-            catch(Exception ex) 
-            { 
-                return BadRequest(ex.Message);
-            }
-        }
 
-        [HttpGet("GetChatByUserName")]
+        [HttpGet("GetChatByUserName/{userName}")]
         public async Task<IActionResult> GetChatByUserName(string userName)
         {
             try
@@ -35,7 +22,7 @@ namespace Chat.Api.Controllers
             }
         }
 
-        [HttpGet("GetChatsByUserId")]
+        [HttpGet("GetChatsByUserId/{userId}")]
         public async Task<IActionResult> GetChatsByUserId(uint userId)
         {
             try

@@ -1,4 +1,5 @@
-﻿using Chat.Core.Interfaces.Services;
+﻿using Chat.Application.DTO;
+using Chat.Application.Interfaces.Services;
 using Chat.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,11 +25,11 @@ namespace Chat.Api.Controllers
         }
 
         [HttpPost("Authorize")]
-        public async Task<IActionResult> Authorize(string login, string password)
+        public async Task<IActionResult> Authorize([FromBody]UserDto userAuthorizationDto)
         {
             try
             {
-                User user = await userService.Authorize(login, password);
+                User user = await userService.Authorize(userAuthorizationDto);
                 return Ok(user);
             }
             catch (Exception ex)
@@ -38,11 +39,11 @@ namespace Chat.Api.Controllers
         }
 
         [HttpPost("Registrate")]
-        public async Task<IActionResult> Registrate(User user)
+        public async Task<IActionResult> Registrate([FromBody]UserDto userDto)
         {
             try
             {
-                await userService.Registrate(user);
+                await userService.Registrate(userDto);
                 return Ok();
             }
             catch (Exception ex)

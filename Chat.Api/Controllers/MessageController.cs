@@ -1,4 +1,5 @@
-﻿using Chat.Core.Interfaces.Services;
+﻿using Chat.Application.DTO;
+using Chat.Application.Interfaces.Services;
 using Chat.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,11 @@ namespace Chat.Api.Controllers
     public class MessageController(IMessageService messageService): ControllerBase
     {
         [HttpPost("AddMessage")]
-        public async Task<IActionResult> AddMessage(Message message)
+        public async Task<IActionResult> AddMessage([FromBody]MessageDto messageDto)
         {
             try
             {
-                var addedMessage = await messageService.AddMessage(message);
+                var addedMessage = await messageService.AddMessage(messageDto);
                 return Ok(addedMessage);
             }
             catch (Exception ex)
@@ -22,7 +23,7 @@ namespace Chat.Api.Controllers
             }
         }
 
-        [HttpGet("GetAllMessagesInChat")]
+        [HttpGet("GetAllMessagesInChat/{chatId}")]
         public async Task<IActionResult> GetAllMessagesInChat(uint chatId)
         {
             try
@@ -36,7 +37,7 @@ namespace Chat.Api.Controllers
             }
         }
 
-        [HttpGet("GetMessageInChat")]
+        [HttpGet("GetMessageInChat/{messageId}")]
         public async Task<IActionResult> GetMessageInChat(uint messageId)
         {
             try
@@ -50,7 +51,7 @@ namespace Chat.Api.Controllers
             }
         }
 
-        [HttpGet("GetMessageInChatForSearch")]
+        [HttpGet("GetMessageInChatForSearch/{searchText}")]
         public async Task<IActionResult> GetMessageInChatForSearch(string searchText)
         {
             try
