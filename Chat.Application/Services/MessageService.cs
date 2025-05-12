@@ -1,26 +1,29 @@
 ﻿using Chat.Core.Interfaces.Repositories;
-using Chat.Core.Interfaces.Services;
+using Chat.Application.Interfaces.Services;
 using Chat.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chat.Application.DTO;
+using Chat.Application.Mapping;
 
 namespace Chat.Application.Services
 {
     public class MessageService(IMessageRepository repository) : IMessageService
     {
-        public Task<uint> AddMessage(Message message)
+        public Task<uint> AddMessage(MessageDto messageDto)
         {
+            var message = MessageMapping.MapMessage(messageDto);
             var addedMessage = repository.AddMessage(message);
             return addedMessage;
         }
 
-        public async Task<List<Message>> GetAllMessagesInChat(uint chatId)
+        public async Task<List<GetMessageDto>> GetAllMessagesInChat(uint chatId)
         {
             var messages = await repository.GetAllMessagesInChat(chatId);
-            return messages;
+            return messages.Select(m => MessageMapping.MapToGetMessageDto(m)).ToList();
         }
 
         public async Task<Message> GetMessageInChat(uint messageId)

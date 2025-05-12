@@ -1,20 +1,22 @@
 ﻿using Chat.Core.Interfaces.Repositories;
-using Chat.Core.Interfaces.Services;
+using Chat.Application.Interfaces.Services;
 using Chat.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chat.Application.DTO;
+using Chat.Application.Mapping;
 
 namespace Chat.Application.Services
 {
     public class UserService(IUserRepository repository) : IUserService
     {
-        public async Task<User> Authorize(string login, string password)
+        public async Task<User> Authorize(UserDto userAuthorizationDto)
         {
-            var user = await repository.Authorize(login, password);
-            if (login == null || password == null) { throw new ArgumentNullException("Login or password empty"); }
+            if (userAuthorizationDto.UserName == null || userAuthorizationDto.Password == null) { throw new ArgumentNullException("Login or password empty"); }
+            var user = await repository.Authorize(userAuthorizationDto.UserName, userAuthorizationDto.Password);
             return user;
         }
 
@@ -25,9 +27,10 @@ namespace Chat.Application.Services
             return users;
         }
 
-        public async Task Registrate(User user)
+        public async Task Registrate(UserDto userDto)
         {
-            if (user == null) { throw new Exception("Empty user"); }
+            if (userDto == null) { throw new Exception("Empty user"); }
+            var user = UserMapping.MapUser(userDto);
             await repository.Registrate(user);
         }
     }

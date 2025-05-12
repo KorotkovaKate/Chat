@@ -1,5 +1,6 @@
 ﻿using Chat.Core.Interfaces.Repositories;
-using Chat.Core.Interfaces.Services;
+using Chat.Application.Interfaces.Services;
+using Chat.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +9,9 @@ using System.Threading.Tasks;
 
 namespace Chat.Application.Services
 {
-    public class ChatService(IChatRepository repository) : IChatService
+
+    public class ChatService(IChatRepository repository, IUserService userService) : IChatService
     {
-        public async Task<uint> AddChat(Core.Models.Chat chat)
-        {
-            var addedchat = await repository.AddChat(chat);
-            return addedchat;
-
-        }
-
         public async Task<Core.Models.Chat> GetChatByUserName(string userName)
         {
             if (string.IsNullOrWhiteSpace(userName)) { throw new ArgumentException("Empty input userName"); }

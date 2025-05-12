@@ -1,4 +1,5 @@
 ﻿using Chat.Core.Interfaces.Repositories;
+using Chat.Application.Interfaces.Services;
 using Chat.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Chat.DAL.Repositories
 {
-    public class UserRepository(ChatDbContext context): IUserRepository
+    public class UserRepository(ChatDbContext context, IChatRepository chatRepository): IUserRepository
     {
         public async Task<User> Authorize(string login, string password)
         {
@@ -31,6 +32,8 @@ namespace Chat.DAL.Repositories
             {
                 context.Users.Add(user);
                 await context.SaveChangesAsync();
+
+                await chatRepository.AddChat(user);
             }
             catch 
             {
