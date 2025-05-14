@@ -14,6 +14,7 @@ namespace Chat.Application.Interfaces.Services
         public Task<Message> GetMessageInChat(uint messageId);
         public Task<List<Message>> GetMessageInChatForSearch(string searchText);
         public Task<uint> AddMessage(MessageDto messageDto);
+        public Task UpdateMessage(UpdateMessageDto updateMessageDto);
         public Task DeleteMessage(uint messageId);
     }
 }

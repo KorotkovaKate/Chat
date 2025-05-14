@@ -20,6 +20,14 @@ namespace Chat.Application.Services
             return addedMessage;
         }
 
+        public async Task UpdateMessage(UpdateMessageDto updateMessageDto)
+        {
+            if(updateMessageDto.Id == null) throw new Exception("Message cant be found");
+            if(string.IsNullOrWhiteSpace(updateMessageDto.Text)) throw new Exception("Text to edit cant be empty");
+            
+            await repository.UpdateMessage(updateMessageDto.Id, updateMessageDto.Text);
+        }
+
         public async Task DeleteMessage(uint messageId)
         {
             var messageToDelete = await repository.GetMessageInChat(messageId);

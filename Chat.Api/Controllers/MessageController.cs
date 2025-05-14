@@ -65,6 +65,21 @@ namespace Chat.Api.Controllers
             }
         }
 
+        [HttpPost("UpdateMessage")]
+        public async Task<IActionResult> UpdateMessage([FromBody] UpdateMessageDto updateMessageDto)
+        {
+            try
+            {
+                await messageService.UpdateMessage(updateMessageDto);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
         [HttpDelete("DeleteMessage/{messageId}")]
         public async Task<IActionResult> DeleteMessage(uint messageId)
         {
