@@ -47,7 +47,7 @@ namespace Chat.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Problem(ex.Message);
             }
         }
 
@@ -62,6 +62,25 @@ namespace Chat.Api.Controllers
             catch (Exception ex)
             { 
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("DeleteMessage/{messageId}")]
+        public async Task<IActionResult> DeleteMessage(uint messageId)
+        {
+            try
+            {
+                await messageService.DeleteMessage(messageId);
+                
+                return Ok();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
             }
         }
     }

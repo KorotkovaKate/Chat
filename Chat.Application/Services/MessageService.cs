@@ -20,6 +20,13 @@ namespace Chat.Application.Services
             return addedMessage;
         }
 
+        public async Task DeleteMessage(uint messageId)
+        {
+            var messageToDelete = await repository.GetMessageInChat(messageId);
+            if (messageToDelete == null) throw new ArgumentNullException("Message to delete not found"); 
+            await repository.DeleteMessage(messageToDelete);
+        }
+
         public async Task<List<GetMessageDto>> GetAllMessagesInChat(uint chatId)
         {
             var messages = await repository.GetAllMessagesInChat(chatId);
