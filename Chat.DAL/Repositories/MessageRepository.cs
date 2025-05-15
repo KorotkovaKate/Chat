@@ -13,6 +13,34 @@ namespace Chat.DAL.Repositories
             return addedMessage.Entity.Id;
         }
 
+        public async Task UpdateMessage(uint messageId, string textToEdit)
+        {
+            try
+            {
+                await context.Messages
+                    .Where(message => message.Id == messageId)
+                    .ExecuteUpdateAsync(message => 
+                        message.SetProperty(message => message.Text, textToEdit));
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error updating message", e);
+            }
+        }
+
+        public async Task DeleteMessage(Message message)
+        {
+            try
+            {
+                context.Messages.Remove(message);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("An error occured while deleting the message", e);
+            }
+        }
+
         public async Task<List<Message>> GetAllMessagesInChat(uint chatId)
         {
             var messageList = await context.Messages.AsNoTracking()
