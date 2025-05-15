@@ -13,13 +13,31 @@ namespace Chat.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.HasKey(user => user.Id);
-            builder.Property(user => user.Id).ValueGeneratedOnAdd();
-            builder.Property(user => user.UserName).HasMaxLength(60).IsRequired();
-            builder.Property(user => user.Password).HasMaxLength(20).IsRequired();
+            builder
+                .HasKey(user => user.Id);
+            
+            builder
+                .Property(user => user.Id)
+                .ValueGeneratedOnAdd();
+            
+            builder
+                .Property(user => user.UserName)
+                .HasMaxLength(60)
+                .IsRequired();
+            
+            builder
+                .Property(user => user.Password)
+                .HasMaxLength(20)
+                .IsRequired();
 
-            builder.HasMany(user => user.Chats).WithMany(chat => chat.Users);
-            builder.HasMany(user => user.Messages).WithOne(message => message.Sender).HasForeignKey(message => message.SenderId);
+            builder
+                .HasMany(user => user.Chats)
+                .WithMany(chat => chat.Users);
+            
+            builder
+                .HasMany(user => user.Messages)
+                .WithOne(message => message.Sender)
+                .HasForeignKey(message => message.SenderId);
         }
     }
 }

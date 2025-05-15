@@ -1,12 +1,6 @@
-﻿using Chat.Application.Services;
-using Chat.Core.Interfaces.Repositories;
+﻿using Chat.Core.Interfaces.Repositories;
 using Chat.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chat.DAL.Repositories
 {
@@ -17,12 +11,12 @@ namespace Chat.DAL.Repositories
             var chats = new List<Core.Models.Chat>();
             var users = await context.Users.ToListAsync();
 
-            foreach (var tempuser in users)
+            foreach (var tempUser in users)
             {
-                if (tempuser.Id == user.Id) { continue; }
-                var chatUsers = new List<User>() { user, tempuser };
+                if (tempUser.Id == user.Id) { continue; }
+                var chatUsers = new List<User>() { user, tempUser };
                 var chat = new Core.Models.Chat();
-                chat.ChatName = tempuser.UserName;
+                chat.ChatName = tempUser.UserName;
                 chat.Users = chatUsers;
                 chat.Messages = new List<Message>();
 
@@ -42,14 +36,18 @@ namespace Chat.DAL.Repositories
                 .AsNoTracking()
                 .Include(chat => chat.Users)
                 .FirstOrDefaultAsync(chat => chat.Users.Any(user => user.UserName == userName));
+            
             if (chat == null) { throw new Exception("No chats with this userName"); }
+            
             return chat;
         }
 
         public async Task<List<Core.Models.Chat>> GetChatsByUserId(uint userId)
         {
             var chat = await context.Chats.AsNoTracking().Where(chat => chat.Users.Any(user => user.Id == userId)).ToListAsync();
+            
             if (chat == null) { throw new Exception("No chats is found"); }
+            
             return chat;
 
         }

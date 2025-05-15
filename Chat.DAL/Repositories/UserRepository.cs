@@ -14,8 +14,11 @@ namespace Chat.DAL.Repositories
     {
         public async Task<User> Authorize(string login, string password)
         {
-            var user = await context.Users.FirstOrDefaultAsync(user => user.UserName == login && user.Password == password);
+            var user = await context.Users
+                .FirstOrDefaultAsync(user => user.UserName == login && user.Password == password);
+            
             if (user == null) { throw new Exception("Not found user"); }
+            
             return user;
         }
 
@@ -26,11 +29,15 @@ namespace Chat.DAL.Repositories
 
         public async Task Registrate(User user)
         {
-            var checkUser = await context.Users.FirstOrDefaultAsync(check => check.UserName == user.UserName);
+            var checkUser = await context.Users
+                .FirstOrDefaultAsync(check => check.UserName == user.UserName);
+            
             if (checkUser != null) { throw new Exception("User already exists"); }
+            
             try
             {
                 context.Users.Add(user);
+                
                 await context.SaveChangesAsync();
 
                 await chatRepository.AddChat(user);

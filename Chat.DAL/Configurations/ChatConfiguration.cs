@@ -13,11 +13,21 @@ namespace Chat.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Core.Models.Chat> builder)
         {
-            builder.HasKey(chat => chat.Id);
-            builder.Property(chat => chat.Id).ValueGeneratedOnAdd();
+            builder
+                .HasKey(chat => chat.Id);
+            
+            builder
+                .Property(chat => chat.Id)
+                .ValueGeneratedOnAdd();
 
-            builder.HasMany(chat => chat.Users).WithMany(user => user.Chats);
-            builder.HasMany(chat => chat.Messages).WithOne(message => message.Chat).HasForeignKey(message => message.ChatId);
+            builder
+                .HasMany(chat => chat.Users)
+                .WithMany(user => user.Chats);
+            
+            builder
+                .HasMany(chat => chat.Messages)
+                .WithOne(message => message.Chat)
+                .HasForeignKey(message => message.ChatId);
         }
     }
 }
