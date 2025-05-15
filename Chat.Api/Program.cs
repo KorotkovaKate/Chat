@@ -24,16 +24,16 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddControllers();
 
 
-builder.Services.AddSwaggerGen();
-builder.Services.AddEndpointsApiExplorer();
-
-var app = builder.Build();
-
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
     });
+
+builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
+
+var app = builder.Build();
 
 app.UseCors(builder => builder
     .AllowAnyOrigin()
