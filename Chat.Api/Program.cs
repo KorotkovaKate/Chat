@@ -29,6 +29,12 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    });
+
 app.UseCors(builder => builder
     .AllowAnyOrigin()
     .AllowAnyMethod()
