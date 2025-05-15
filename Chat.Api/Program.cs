@@ -1,3 +1,4 @@
+using Chat.Api.Hubs;
 using Chat.Api.JWTTokens;
 using Chat.Application.Services;
 using Chat.Core.Interfaces.Repositories;
@@ -47,13 +48,15 @@ app.UseSwaggerUI();
 app.UseRouting();
 
 app.UseCors(builder => builder
-    .AllowAnyOrigin()
+    .WithOrigins("https://online-chat-weld-alpha.vercel.app")
     .AllowAnyMethod()
-    .AllowAnyHeader());
+    .AllowAnyHeader()
+    .AllowCredentials());
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/chat");
 
 app.Run();
