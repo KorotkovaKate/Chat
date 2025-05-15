@@ -38,7 +38,10 @@ namespace Chat.DAL.Repositories
 
         public async Task<Core.Models.Chat> GetChatByUserName(string userName)
         {
-            var chat = await context.Chats.AsNoTracking().FirstOrDefaultAsync(chat => chat.Users.Any(user => user.UserName == userName));
+            var chat = await context.Chats
+                .AsNoTracking()
+                .Include(chat => chat.Users)
+                .FirstOrDefaultAsync(chat => chat.Users.Any(user => user.UserName == userName));
             if (chat == null) { throw new Exception("No chats with this userName"); }
             return chat;
         }
