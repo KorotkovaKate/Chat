@@ -1,12 +1,14 @@
 ﻿using Chat.Application.DTO;
 using Chat.Application.Interfaces.Services;
 using Chat.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chat.Api.Controllers
 {
     [ApiController]
     [Route("Messages")]
+    [Authorize]
     public class MessageController(IMessageService messageService): ControllerBase
     {
         [HttpPost("AddMessage")]
