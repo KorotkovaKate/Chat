@@ -27,6 +27,15 @@ namespace Chat.Application.Services
             return users;
         }
 
+        public async Task<User> GetUserById(uint userId)
+        {
+            var user = repository.GetUserById(userId);
+            
+            if (user == null) throw new NullReferenceException("User not found");
+
+            return await user;
+        }
+
         public async Task Registrate(UserDto userDto)
         {
             if (userDto == null) { throw new Exception("Empty user"); }

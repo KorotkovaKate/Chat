@@ -12,7 +12,7 @@ namespace Chat.Core.Interfaces.Repositories
         public Task<List<Message>> GetAllMessagesInChat(uint chatId);
         public Task<Message> GetMessageInChat(uint messageId);
         public Task<List<Message>> GetMessageInChatForSearch(string searchText);
-        public Task<uint> AddMessage(Message message);
+        public Task<Message> AddMessage(Message message);
         public Task UpdateMessage(uint messageId, string textToEdit);
         public Task DeleteMessage(Message message);
     }

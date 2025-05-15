@@ -1,15 +1,17 @@
-﻿using Chat.Application.DTO;
+﻿using Chat.Api.Hubs;
+using Chat.Application.DTO;
 using Chat.Application.Interfaces.Services;
 using Chat.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Chat.Api.Controllers
 {
     [ApiController]
     [Route("Messages")]
     [Authorize]
-    public class MessageController(IMessageService messageService): ControllerBase
+    public class MessageController(IMessageService messageService, IUserService userService, IHubContext<ChatHub> hubContext): ControllerBase
     {
         [HttpPost("AddMessage")]
         public async Task<IActionResult> AddMessage([FromBody]MessageDto messageDto)
@@ -17,6 +19,19 @@ namespace Chat.Api.Controllers
             try
             {
                 var addedMessage = await messageService.AddMessage(messageDto);
+
+                var messageOwner =  await userService.GetUserById(addedMessage.SenderId);
+                
+                await hubContext.Clients
+                    .Group(addedMessage.ChatId.ToString())
+                    .SendAsync(
+                        "ReceiveMessage",
+                        messageOwner.Id,
+                        messageOwner.UserName,
+                        addedMessage.Text,
+                        DateTime.UtcNow.ToString("HH:mm"),
+                        addedMessage.Id);
+                
                 return Ok(addedMessage);
             }
             catch (Exception ex)

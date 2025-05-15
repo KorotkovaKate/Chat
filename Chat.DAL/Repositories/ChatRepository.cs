@@ -6,7 +6,7 @@ namespace Chat.DAL.Repositories
 {
     public class ChatRepository(ChatDbContext context) : IChatRepository
     {
-        public async Task AddChat(User user)
+        public async Task AddChat(User? user)
         {
             var chats = new List<Core.Models.Chat>();
             var users = await context.Users.ToListAsync();
@@ -14,7 +14,7 @@ namespace Chat.DAL.Repositories
             foreach (var tempUser in users)
             {
                 if (tempUser.Id == user.Id) { continue; }
-                var chatUsers = new List<User>() { user, tempUser };
+                var chatUsers = new List<User?>() { user, tempUser };
                 var chat = new Core.Models.Chat();
                 chat.ChatName = tempUser.UserName;
                 chat.Users = chatUsers;

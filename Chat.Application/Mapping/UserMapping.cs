@@ -10,7 +10,7 @@ namespace Chat.Application.Mapping
 {
     public class UserMapping
     {
-        public static User MapUser(UserDto userDto)
+        public static User? MapUser(UserDto userDto)
         {
             return new User()
             {

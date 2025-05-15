@@ -13,5 +13,6 @@ namespace Chat.Application.Interfaces.Services
         public Task<User> Authorize(UserDto userAuthorizationDto);
         public Task Registrate(UserDto userDto);
         public Task<List<User>> GetAllUsers();
+        public Task<User> GetUserById(uint userId);
     }
 }

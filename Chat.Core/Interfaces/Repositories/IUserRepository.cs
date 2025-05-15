@@ -10,7 +10,8 @@ namespace Chat.Core.Interfaces.Repositories
     public interface IUserRepository
     {
         public Task<User> Authorize(string login, string password);
-        public Task Registrate(User user);
+        public Task Registrate(User? user);
         public Task<List<User>> GetAllUsers();
+        public Task<User?> GetUserById(uint id);
     }
 }

@@ -27,7 +27,20 @@ namespace Chat.DAL.Repositories
             return await context.Users.AsNoTracking().OrderBy(user => user.UserName).ToListAsync();
         }
 
-        public async Task Registrate(User user)
+        public async Task<User?> GetUserById(uint id)
+        {
+            try
+            {
+                return await context.Users
+                    .FindAsync(id);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"User with id = {id} not found", e);
+            }
+        }
+
+        public async Task Registrate(User? user)
         {
             var checkUser = await context.Users
                 .FirstOrDefaultAsync(check => check.UserName == user.UserName);
@@ -47,5 +60,7 @@ namespace Chat.DAL.Repositories
                 throw new Exception();
             }
         }
+        
+        
     }
 }

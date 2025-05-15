@@ -6,13 +6,13 @@ namespace Chat.DAL.Repositories
 {
     public class MessageRepository(ChatDbContext context) : IMessageRepository
     {
-        public async Task<uint> AddMessage(Message message)
+        public async Task<Message> AddMessage(Message message)
         {
             var addedMessage = await context.Messages.AddAsync(message);
             
             await context.SaveChangesAsync();
             
-            return addedMessage.Entity.Id;
+            return addedMessage.Entity;
         }
 
         public async Task UpdateMessage(uint messageId, string textToEdit)
