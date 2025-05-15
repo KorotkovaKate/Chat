@@ -82,13 +82,20 @@ namespace Chat.Api.Controllers
             }
         }
 
-        [HttpPost("UpdateMessage")]
-        public async Task<IActionResult> UpdateMessage([FromBody] UpdateMessageDto updateMessageDto)
+        [HttpPut("{chatId}/Messages/{messageId}/Edit")]
+        public async Task<IActionResult> UpdateMessage(uint chatId, uint messageId, [FromBody] UpdateMessageDto updateMessageDto)
         {
             try
             {
                 await messageService.UpdateMessage(updateMessageDto);
 
+                await hubContext.Clients
+                    .Group(chatId.ToString())
+                    .SendAsync(
+                        "EditMessage",
+                        updateMessageDto.Text,
+                        updateMessageDto.Id);
+                
                 return Ok();
             }
             catch (Exception e)
@@ -97,12 +104,18 @@ namespace Chat.Api.Controllers
             }
         }
 
-        [HttpDelete("DeleteMessage/{messageId}")]
-        public async Task<IActionResult> DeleteMessage(uint messageId)
+        [HttpDelete("{chatId}/DeleteMessage/{messageId}/Delete")]
+        public async Task<IActionResult> DeleteMessage(uint messageId, uint chatId)
         {
             try
             {
                 await messageService.DeleteMessage(messageId);
+
+                await hubContext.Clients
+                    .Group(chatId.ToString())
+                    .SendAsync(
+                        "DeleteMessage",
+                        messageId);
                 
                 return Ok();
             }
