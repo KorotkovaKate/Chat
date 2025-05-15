@@ -37,6 +37,8 @@ builder.Services.AddControllers()
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 app.UseSwagger();
